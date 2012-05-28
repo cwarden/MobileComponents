@@ -57,9 +57,12 @@
 
 
 
-**$V.Class** - A standard class that provides OOP-style inheritance in Javascript. It is used primarily by instances of the Component class to support the addition of new types of renderable components.
+**$V.Class** - A standard class that provides OOP-style inheritance in Javascript. It is used primarily by instances of the Component class to support the addition of new types of renderable components. The 'init' method is given the behavior of an OOP constructor, and access to a parent class' init is provided by calling this._super with any arguments. Class inheritance is performed by using the 'extend' method of any class that inherits from $V.Class, like this: 
 
-**$V.Component** - _extends Class_ - All VF Mobile Components must extend this class. Inheriting classes must implement the init, prepare, and render methods, and must call the this._super method before any implementation code.
+        $V.ListComponent = $V.Component.extend({ /* Method definitions */});
+        
+
+**$V.Component** - _extends Class_ - All VF Mobile Components must extend this class. Inheriting classes must implement the 'init', 'prepare', and 'render' methods, and must call the this._super method before any implementation code.
 
 **$V.Component Config**
 
