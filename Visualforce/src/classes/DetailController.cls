@@ -32,7 +32,7 @@ layouts: [{
     recordTypeName:
     defaultRecordTypeMapping:
     name: <not available>
-    sFieldNames:['field1', 'field2']
+    fields:['field1', 'field2']
     detailSections: [{
         heading:
         columns:
@@ -52,8 +52,9 @@ public with sharing class DetailController extends SObjectController {
     private final static String DETAIL_COMPONENT_JS = 'DetailComponentJS';
     
     public virtual class DetailConfig extends SObjectConfig {
-        public Boolean debug { get; set; }
-        public String serverCtlrName = getFullyQualifiedClassName(DetailController.class);
+        public DetailConfig() {
+            this.serverCtlrName = getFullyQualifiedClassName(DetailController.class);
+        }
     }
 
     public DetailController() {
@@ -68,8 +69,8 @@ public with sharing class DetailController extends SObjectController {
         return (DetailConfig)config;
     }
     
-    public String getDetailComponentJS() {
-        return getConfig().debug ? DETAIL_COMPONENT_JS : (DETAIL_COMPONENT_JS + 'Min');
+    public override String getComponentJS() {
+        return getConfig().debug ? DETAIL_COMPONENT_JS : super.getComponentJS();
     }
     
     public class LayoutResponse extends RemoteResponse {
@@ -86,11 +87,11 @@ public with sharing class DetailController extends SObjectController {
     	String recordTypeName;
     	Boolean defaultRecordTypeMapping;
     	List<LayoutSection> detailSections;
-    	Set<String> sFieldNames;
+    	Set<String> fields;
     	
     	public Layout() {
     		this.detailSections = new List<LayoutSection>();
-    		this.sFieldNames = new Set<String>();
+    		this.fields = new Set<String>();
     	}
     }
 
@@ -121,12 +122,12 @@ public with sharing class DetailController extends SObjectController {
         }
         private void addComponent(SObjectType objectType, Layout layout, SFDCPartnerSoap.DescribeLayoutComponent comp) {
         	if (comp.type_x.equalsIgnoreCase('Field')) {
-        		layout.sFieldNames.add(comp.value);
+        		layout.fields.add(comp.value);
         		Schema.DescribeFieldResult fieldDesc = SchemaManager.getFieldDescribe(objectType, comp.value);
         		if (fieldDesc.getType() == Schema.DisplayType.Reference) {
         			String nameField = SchemaManager.getNameFieldForReferenceField(fieldDesc);
         			this.valueTemplate += '{{if '+ fieldDesc.getRelationshipName() +'}}${' + nameField + '}{{/if}}';
-        			layout.sFieldNames.add(nameField);
+        			layout.fields.add(nameField);
         		} else {
         			this.valueTemplate += '{{if typeof('+ comp.value +') != "undefined"}}' +
         			                      '{{html $item.value("' + fieldDesc.getType() + '",' + comp.value + ')}}' + 
@@ -160,12 +161,12 @@ public with sharing class DetailController extends SObjectController {
     }
     
     @RemoteAction
-    public static SObjectResponse querySObject(DetailConfig config, Id sobjectId, List<String> sFieldNames) {
+    public static SObjectResponse querySObject(DetailConfig config, Id sobjectId, List<String> fields) {
     	DetailController controller = new DetailController(config);
     	
     	Set<String> fieldsToQuery = new Set<String>();
-    	sFieldNames.add('id');
-    	for (String fieldName : sFieldNames) fieldsToQuery.add(fieldName.toLowerCase());
+    	fields.add('id');
+    	for (String field : fields) fieldsToQuery.add(field.toLowerCase());
     	
         return new SObjectResponse(controller.getDescribe().getSObjectType(), 
             controller.querySObject(fieldsToQuery, new Id[] {sobjectId}), DateTime.now());

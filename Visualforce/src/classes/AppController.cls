@@ -35,14 +35,14 @@ public class AppController extends BaseConfigController {
     private final static String JQUERY_TEMPLATE_JS_DEBUG = 'http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js';
     private final static String JQUERY_MOBILE_JS = 'jqm11js';
     private final static String MOBILE_SPLIT_VIEW_JS = 'jqmSVjs';
-    private final static String MOBILE_SDK_JS = 'MobileVisualforceSDKjs';
 
     /**
      * App component config options.
      */
     public virtual class AppConfig extends BaseConfig {
-        public Boolean debug { get; set; }
-        String serverCtlrName = getFullyQualifiedClassName(AppController.class);
+        public AppConfig() {
+            this.serverCtlrName = getFullyQualifiedClassName(AppController.class);
+        }
     }
 
     public AppController() {
@@ -69,16 +69,6 @@ public class AppController extends BaseConfigController {
         return getConfig().debug ? MOBILE_SPLIT_VIEW_JS : (MOBILE_SPLIT_VIEW_JS + 'Min');
     }
     
-    public String getMobileSDKJs() {
-        return getConfig().debug ? MOBILE_SDK_JS : (MOBILE_SDK_JS + 'Min');
-    }
-    
-    public Component.Apex.OutputPanel getAdditionalScripts() {
-    	Component.Apex.OutputPanel panel = new Component.Apex.OutputPanel(layout='none');
-	
-        return panel;
-    }
-
     @RemoteAction
     public static Map<String,Object> getUser() {
         Map<String,Object> user = new Map<String,Object>();

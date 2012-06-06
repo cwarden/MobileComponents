@@ -34,7 +34,6 @@ public class ListController extends SObjectController {
     // config for list component
     public virtual class ListConfig extends SObjectConfig {
 
-        public Boolean debug { get; set; }
         public String labelField { get;
             set {
                 labelField = value;
@@ -46,11 +45,14 @@ public class ListController extends SObjectController {
                 addField(subLabelField);
             }}
         public String filter { get; set; }
+        public String filterClause { get; set; }
         public String listItemStyleClass { get; set; }
         public String listDividerStyleClass { get; set; }
         public String nextPage { get; set; }
 
-        public String serverCtlrName = getFullyQualifiedClassName(ListController.class);
+        public ListConfig() {
+            this.serverCtlrName = getFullyQualifiedClassName(ListController.class);
+        }
     }
 
     // incoming list-based remote request
@@ -58,8 +60,6 @@ public class ListController extends SObjectController {
         protected ListConfig config;
         public ListRequest(ListConfig config, Map<String, String> values) {
             super(values);
-            System.debug('config: ' + config);
-            System.debug('values: ' + values);
             this.config = config;
         }
 
@@ -81,8 +81,8 @@ public class ListController extends SObjectController {
         return (ListConfig)config;
     }
     
-    public String getListComponentJS() {
-        return getConfig().debug ? LIST_COMPONENT_JS : (LIST_COMPONENT_JS + 'Min');
+    public override String getComponentJS() {
+        return getConfig().debug ? LIST_COMPONENT_JS : super.getComponentJS();
     }
     
     @RemoteAction
@@ -95,7 +95,6 @@ public class ListController extends SObjectController {
     public List<SObject> getList() {
         DescribeSObjectResult descInfo = this.getDescribe();
         Map<String, SObjectField> fieldMap = descInfo.fields.getMap();
-        ListConfig config = (ListConfig)this.config;
         
         String soql = 'SELECT ';
         String sortByFilter = '';
@@ -121,15 +120,16 @@ public class ListController extends SObjectController {
         String whereClause = '';
 
         if (getConfig().filter != null && getConfig().filter.length() > 0) {
-            if (getConfig().filter.equalsIgnoreCase('owner')) soql += (' WHERE ownerId = \'' + UserInfo.getUserId() + '\'');
-            else if (this.isFeedEnabled() && getConfig().filter.equalsIgnoreCase('follower')) {
+            if (getConfig().filter.equalsIgnoreCase('owner')) {
+                whereClause += (' ownerId = \'' + UserInfo.getUserId() + '\'');
+            } else if (this.isFeedEnabled() && getConfig().filter.equalsIgnoreCase('follower')) {
                 whereClause += (' Id IN (SELECT ParentId FROM EntitySubscription WHERE parent.type = \'' + this.getName() + '\'' +
                                         ' AND SubscriberID = \'' + UserInfo.getUserId() + '\')');
             }
         }
-        if (config.filterClause != null && config.filterClause != '') {
-            whereClause += (whereClause != '') ? ' AND ' : '';
-            whereClause += config.filterClause;//REVIEWME: Worry about escaping this?
+        if (getConfig().filterClause != null && getConfig().filterClause != '') {
+            whereClause += (whereClause.length() > 0) ? ' AND ' : '';
+            whereClause += getConfig().filterClause;//REVIEWME: Worry about escaping this?
         }
         
         if (whereClause.length() > 0) {
@@ -137,7 +137,6 @@ public class ListController extends SObjectController {
         }
         
         soql += (sortByFilter + ' LIMIT 500'); // FIXME: reduce to much less, say 25 or 50, at most
-        System.debug('soql: ' + soql);
 
         return Database.query(soql);
     }

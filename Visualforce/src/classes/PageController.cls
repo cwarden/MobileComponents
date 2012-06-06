@@ -36,19 +36,20 @@ public class PageController extends BaseConfigController {
      */
     public virtual class PageConfig extends BaseConfig {
         // behavior and styling
-        public Boolean debug { get; set; }
         public String transition { get; set; }
         public String css { get; set; }
 
-        String serverCtlrName = getFullyQualifiedClassName(PageController.class);
+        public PageConfig() {
+            this.serverCtlrName = getFullyQualifiedClassName(PageController.class);
+        }
     }
 
     public PageController() {
         super(new PageConfig());
     }
     
-    public String getPageComponentJS() {
-        return getConfig().debug ? PAGE_COMPONENT_JS : (PAGE_COMPONENT_JS + 'Min');
+    public override String getComponentJS() {
+        return getConfig().debug ? PAGE_COMPONENT_JS : super.getComponentJS();
     }
     
     public PageConfig getConfig() {

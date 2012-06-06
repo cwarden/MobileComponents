@@ -9,7 +9,7 @@
     <apex:attribute name="debug" type="Boolean" assignTo="{!config.debug}" default="false" description=""/>
     
     <!-- VF/HTML -->
-    <apex:includeScript value="{!URLFOR($Resource[PageComponentJS])}"/>
+    <apex:includeScript value="{!URLFOR($Resource[ComponentJS])}"/>
     
     <section id="{!config.elemId}" data-role="page" data-url="{!config.elemId}" data-add-back-btn="{!back}" data-theme="{!theme}">
         <apex:componentBody />

@@ -19,7 +19,7 @@
     <apex:attribute name="debug" type="Boolean" assignTo="{!config.debug}" default="false" description=""/>
     
     <!-- VF/HTML -->
-    <apex:includeScript value="{!URLFOR($Resource[ListComponentJS])}"/>
+    <apex:includeScript value="{!URLFOR($Resource[ComponentJS])}"/>
     
     <apex:outputPanel layout="inline" id="list">
        <ul data-role="listview" data-filter="{!listFilter}"></ul>

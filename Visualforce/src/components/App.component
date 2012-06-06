@@ -24,10 +24,8 @@
     <apex:includeScript value="{!JqueryTemplateJsUrl}"/>
     <apex:includeScript value="{!URLFOR($Resource[MobileSplitViewJs])}"/> <!-- This must be in the App level. -->
     <apex:includeScript value="{!URLFOR($Resource[JqueryMobileJs])}"/>
-    <apex:includeScript value="{!URLFOR($Resource[MobileSDKJs])}"/>
+    <apex:includeScript value="{!URLFOR($Resource[ComponentJS])}"/>
     
-    <apex:dynamicComponent componentValue="{!additionalScripts}" rendered="{!debug}"/>
-
     <apex:stylesheet value="{!URLFOR($Resource.jqm11css)}"/>
     <apex:stylesheet value="{!URLFOR($Resource.jqmSVcss)}"/>
     <apex:stylesheet value="{!URLFOR($Resource.MobileVisualforceSDKcss)}"/>

@@ -1,3 +1,6 @@
 *~
 build.properties
 build.xml
+Visualforce/.project
+Visualforce/.settings
+Visualforce/salesforce.schema

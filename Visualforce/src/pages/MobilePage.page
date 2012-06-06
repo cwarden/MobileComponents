@@ -1,34 +1,23 @@
 <apex:page showHeader="false"  standardStylesheets="false" cache="false" doctype="html-5.0">
-<c:App debug="true">
+<c:App >
     <apex:composition template="SplitViewTemplate">
         <apex:define name="menu">
-            <c:Page name="list"
-                    theme="touch"
-                    debug="true">
+            <c:Page name="list" theme="touch">
                 <c:Header >
-                    <h1 style="font-size: 20px; margin: 0px;">All Cases</h1>
+                    <h1 style="font-size: 20px; margin: 0px;">All Contacts</h1>
                 </c:Header>
                 <c:Content >
-                    <c:List sobject="Case"
-                            labelField="Owner.Name"
-                            subLabelField="Priority"
-                            sortByField="Priority"
-                            listFilter="true"
-                            filter="recent"
-                            debug="true"/>
+                    <c:List sobject="Contact" labelField="Name" subLabelField="Account.Name" sortByField="FirstName" listFilter="true"/>
                 </c:Content>
             </c:Page>
         </apex:define>
         <apex:define name="main">
-            <c:Page name="main"
-                    theme="touch"
-                    debug="true">
+            <c:Page name="main" theme="touch">
                 <c:Header >
-                    <h1 style="font-size: 22px; margin: 0px;">Case Details</h1>
+                    <h1 style="font-size: 22px; margin: 0px;">Contact Details</h1>
                 </c:Header>
                 <c:Content >
-                    <c:Detail sobject="Case"
-                              debug="true"/>
+                    <c:Detail sobject="Contact"/>
                 </c:Content>
             </c:Page>
         </apex:define>

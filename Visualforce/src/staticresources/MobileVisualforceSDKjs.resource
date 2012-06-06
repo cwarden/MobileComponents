@@ -299,14 +299,14 @@ $V = Visualforce.Mobile;
             );
     
             // fetch field metadata
-            if (this.config.sFieldNames && this.config.sFieldNames.length > 0) {
+            if (this.config.fields && this.config.fields.length > 0) {
             $V.App.getFn(this.config.serverCtlrName).getFieldMetadata(
-                    this.config.sFieldNames,
+                    this.config.fields,
                     (function(that) {
                         return function(result, event) {
                             if (event.status && result && !result.errors) {
-                                that.config.sFieldNames = result;
-                                that.log.debug('Field metadata', that.config.sFieldNames);
+                                that.config.fields = result;
+                                that.log.debug('Field metadata', that.config.fields);
                             } else {
                                 $V.App.handleRemoteErrs(result, event, null, true);
                             }

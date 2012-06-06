@@ -35,7 +35,6 @@ public class NavController extends BaseConfigController {
      * Nav component config options.
      */
     public virtual class NavConfig extends BaseConfig {
-        public Boolean debug { get; set; }
         public String pages { get; set; }
     }
 
@@ -43,8 +42,8 @@ public class NavController extends BaseConfigController {
         super(new NavConfig());
     }
     
-    public String getNavComponentJS() {
-        return getConfig().debug ? NAV_COMPONENT_JS : (NAV_COMPONENT_JS + 'Min');
+    public override String getComponentJS() {
+        return getConfig().debug ? NAV_COMPONENT_JS : super.getComponentJS();
     }
     
     public NavConfig getConfig() {

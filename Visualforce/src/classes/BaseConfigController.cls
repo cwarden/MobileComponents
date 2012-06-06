@@ -28,6 +28,9 @@
  * Base controller for config-based components.
  */
 public abstract class BaseConfigController {
+	
+	private final static String MOBILE_SDK_JS = 'MobileVisualforceSDKjs';
+	
     protected BaseConfig config;
 
     public BaseConfigController(BaseConfig config) {
@@ -38,5 +41,9 @@ public abstract class BaseConfigController {
         String configStr = JSON.serialize(config);
         System.debug(configStr);
         return configStr;
+    }
+    
+    public virtual String getComponentJS() {
+    	return this.config.debug ? MOBILE_SDK_JS : (MOBILE_SDK_JS + 'Min');
     }
 }

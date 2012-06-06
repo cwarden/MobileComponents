@@ -35,27 +35,26 @@ public with sharing abstract class SObjectController extends BaseConfigControlle
     public virtual class SObjectConfig extends BaseConfig {
         public String sid { get; set; }
         public String stype { get; set; }
-        public String filterClause { get; set; }
         public String sortByField { get; set; }
         public Integer queryLimit { get; set; }
-        public List<String> sFieldNames { get; set; } // metadata lookup
+        public List<String> fields { get; set; } // metadata lookup
         
         // Adds the name of a field to the config object.
         // With a field name, the client can later request metadata.
         protected void addField(String field) {
             System.debug('adding field:' + field);
-            if (sFieldNames == null) sFieldNames = new List<String>();
+            if (fields == null) fields = new List<String>();
             if (field.indexOf('.') > -1) {
-                sFieldNames.add(field);
+                fields.add(field);
                 System.debug('adding field, as-is:' + field);
             } else {
                 if (stype != null) {
-                    sFieldNames.add(stype + '.' + field);
+                    fields.add(stype + '.' + field);
                     System.debug('adding field, stype:' + stype + '.' + field);
                 } else if (sid != null) {
                     Schema.SObjectType type = SchemaManager.getObjectForId(sid);
                     if (type != null) {
-                        sFieldNames.add(type.getDescribe().getName() + '.' + field);
+                        fields.add(type.getDescribe().getName() + '.' + field);
                         System.debug('adding field, sid:' + type.getDescribe().getName() + '.' + field);
                     }
                 }
@@ -113,7 +112,7 @@ public with sharing abstract class SObjectController extends BaseConfigControlle
 
         return SOBJECT_DESCRIBE;
     }
-    
+
     private void initializeSObject() {
         if (config == null || !(config instanceof SObjectConfig) || ((SObjectConfig)config).stype == null)
            throw new AppUtil.AppException('Expected sobject type value');
@@ -149,7 +148,6 @@ public with sharing abstract class SObjectController extends BaseConfigControlle
     public List<SObject> querySObject(Set<String> fieldsToQuery, List<Id> ids) {
         
         Map<String, SObjectField> fieldMap = this.getDescribe().fields.getMap();
-        SObjectController.SObjectConfig config = (SObjectController.SObjectConfig)this.config;
         
         String soql = 'SELECT ';
         
@@ -163,11 +161,7 @@ public with sharing abstract class SObjectController extends BaseConfigControlle
         
         if (ids != null && !ids.isEmpty()) {
         	String idsFilter = AppUtil.createCSVFromList(ids, true);
-        	soql += ' WHERE id IN (' + idsFilter + ')';
-        }
-        System.debug('config: ' + config);
-        if (config.filterClause != null && config.filterClause != '') {
-            soql += ' AND ' + config.filterClause;//REVIEWME: Worry about escaping this for safety?
+            soql += ' WHERE id IN (' + idsFilter + ')';
         }
         
         System.debug(soql);
