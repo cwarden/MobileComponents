@@ -1,4 +1,4 @@
-<apex:component controller="HeaderController">
+<apex:component controller="HeaderController" layout="none">
     <!--  style and behavior -->
     <apex:attribute name="position" type="String" default="fixed" description="[inline|fixed]"/>
     
@@ -7,15 +7,4 @@
 	        <apex:componentBody />
 	    </header><!-- /header -->
     </apex:outputPanel>
-    
-    <script>
-        //Removing all the parent span tags until the next release VF fix
-        (function($) {
-            var elem = $('[id="{!$Component.header}');
-            elem.parent('span').replaceWith(function() {
-                elem.find('script').remove();
-                return elem;
-            });
-        })(jQuery);
-    </script>
 </apex:component>

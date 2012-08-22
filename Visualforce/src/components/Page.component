@@ -1,4 +1,4 @@
-<apex:component controller="PageController">
+<apex:component controller="PageController" layout="none">
     <!-- general -->
     <apex:attribute name="name" type="String" assignTo="{!config.elemId}" required="true" description=""/>
     <!--  style and behavior -->
@@ -16,10 +16,5 @@
     </section>
     <script>
          $V.App.registerPage('{!config.elemId}');
-         (function($) {
-             $('#{!config.elemId}').parent().replaceWith(function() {
-                 return $('#{!config.elemId}');
-             });
-         })(jQuery);
-     </script>
+    </script>
 </apex:component>

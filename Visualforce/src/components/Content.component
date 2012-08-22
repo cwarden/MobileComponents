@@ -1,17 +1,7 @@
-<apex:component controller="ContentController">
+<apex:component controller="ContentController" layout="none">
     <apex:outputPanel layout="none" id="content">
 	    <div data-role="content" id="{!$Component.content}">
 	        <apex:componentBody />
 	    </div><!-- /content -->
     </apex:outputPanel>
-    <script>
-         //Removing all the parent span tags until the next release VF fix
-         (function($) {
-             var elem = $('[id="{!$Component.content}"]');
-             elem.parent('span').replaceWith(function() {
-                 elem.find('script').remove();
-                 return elem;
-             });
-         })(jQuery);
-     </script>
 </apex:component>

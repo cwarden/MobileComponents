@@ -1,4 +1,4 @@
-<apex:component controller="DetailController">
+<apex:component controller="DetailController" layout="none">
     <apex:attribute name="sobject" type="String" required="true" assignTo="{!config.sType}" description="SObject for which list needs to be generated."/>
     <apex:attribute name="jsCtlrName" type="String" assignTo="{!config.jsCtlrName}" default="$V.DetailComponent" description="Custom Javascript handler to manage client-side lifecycle and behavior."/>
     <apex:attribute name="debug" type="Boolean" assignTo="{!config.debug}" default="false" description=""/>

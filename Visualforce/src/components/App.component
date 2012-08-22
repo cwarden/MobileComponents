@@ -1,4 +1,4 @@
-<apex:component controller="AppController">
+<apex:component controller="AppController" layout="none">
     <apex:attribute name="elemId" type="String" assignTo="{!config.elemId}" required="false" default="app" description=""/>
     <apex:attribute name="debug" type="Boolean" assignTo="{!config.debug}" default="false" description=""/>
     
