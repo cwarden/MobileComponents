@@ -99,7 +99,7 @@
                                     comp.allFields = [];
                                     $.each(comp.layouts, function() {
                                         comp.allFields = comp.allFields.concat(this.fields);
-                                        $.template(comp.config.stype+'.'+this.recordTypeId, getLayoutMarkup(this));
+                                        $.template(comp.config.stype+'.'+this.id, getLayoutMarkup(this));
                                     });
                                     if (comp.layouts.length > 1) comp.allFields.push('RecordTypeId');
                                     //Filter unique fields
@@ -147,13 +147,13 @@
                     if ($.isArray(result.records) && result.records.length == 1) {
                         if (this.layouts.length > 1)  {
                             layout = this.layouts.filter(function(val) {
-                            if (result.records[0].RecordTypeId) return val.recordTypeId == result.records[0].RecordTypeId;
-                                else return val.defaultRecordTypeMapping; 
+                                for (var idx in val.recordTypeIds) 
+                                    return val.recordTypeIds[idx] == result.records[0].RecordTypeId;
                             })[0];
                         } else if (this.layouts.length == 1) layout = this.layouts[0];
                         
                         this.$me.empty();
-                        $.tmpl(this.config.stype + '.' + layout.recordTypeId, result.records[0], tmplOptions).appendTo(this.$me);
+                        $.tmpl(this.config.stype + '.' + layout.id, result.records[0], tmplOptions).appendTo(this.$me);
                         data = [{config: {stype: this.config.stype}, data: result.records[0]}];
                         // REVIEWME: narrow event firing scope to this component?
                         $(document).trigger('detailloaded', data);

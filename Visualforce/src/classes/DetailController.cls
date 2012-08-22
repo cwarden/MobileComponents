@@ -28,7 +28,7 @@
 * Exposes 1 method: 1) Get all layout infos
 layouts: [{
     id:
-    recordTypeId:
+    recordTypeIds: [array of all record type ids associated to this layout]
     recordTypeName:
     defaultRecordTypeMapping:
     name: <not available>
@@ -83,13 +83,12 @@ public with sharing class DetailController extends SObjectController {
 
     public class Layout {
     	Id id;
-    	Id recordTypeId;
-    	String recordTypeName;
-    	Boolean defaultRecordTypeMapping;
+    	List<Id> recordTypeIds;
     	List<LayoutSection> detailSections;
     	Set<String> fields;
     	
     	public Layout() {
+    		this.recordTypeIds = new List<Id>();
     		this.detailSections = new List<LayoutSection>();
     		this.fields = new Set<String>();
     	}
@@ -181,10 +180,15 @@ public with sharing class DetailController extends SObjectController {
     public List<Layout> parseLayouts(SFDCPartnerSoap.DescribeLayoutResult layoutInfos) {
 
         List<Layout> layouts = new List<Layout>();
-        Map<Id, SFDCPartnerSoap.RecordTypeMapping> layoutToRecordTypeMap = new Map<Id, SFDCPartnerSoap.RecordTypeMapping>();
+        Map<Id, List<Id>> layoutToRecordIdsMap = new Map<Id, List<Id>>();
 
         for (SFDCPartnerSoap.RecordTypeMapping recordTypeMap : layoutInfos.recordTypeMappings) {
-            layoutToRecordTypeMap.put(recordTypeMap.layoutId, recordTypeMap);
+        	List<Id> recordIds = layoutToRecordIdsMap.get(recordTypeMap.layoutId);
+        	if (recordIds == null) {
+        		recordIds = new List<Id>();
+        		layoutToRecordIdsMap.put(recordTypeMap.layoutId, recordIds);
+        	}
+            recordIds.add(recordTypeMap.recordTypeId);
         }
 
         layoutInfos.recordTypeMappings = null; // minify layout (to save on heap space): REVIEW - Do we need this?
@@ -199,12 +203,8 @@ public with sharing class DetailController extends SObjectController {
             layoutDesc.buttonLayoutSection = null;
             layoutDesc.relatedLists = null;
 
-            SFDCPartnerSoap.RecordTypeMapping recordTypeInfo = layoutToRecordTypeMap.get(layoutDesc.id);
-
             layout.id = layoutDesc.id;
-            layout.recordTypeId = recordTypeInfo.recordTypeId;
-            layout.recordTypeName = recordTypeInfo.name;
-            layout.defaultRecordTypeMapping = recordTypeInfo.defaultRecordTypeMapping;
+            layout.recordTypeIds = layoutToRecordIdsMap.get(layoutDesc.id);
             
             for (SFDCPartnerSoap.DescribeLayoutSection sectionDesc : layoutDesc.detailLayoutSections) { 
                 if (sectionDesc != null && sectionDesc.layoutRows != null) {
