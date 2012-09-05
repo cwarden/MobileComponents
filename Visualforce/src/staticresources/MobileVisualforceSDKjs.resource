@@ -216,9 +216,17 @@ $V = Visualforce.Mobile;
     
                 if (that.config.debug === true) {
                     // Hook for remoting before call
-                    Visualforce.remoting.RemotingProvider.on('beforecall',function(pdr,tx,m){
-                        that.log.debug('VF Remoting beforecall', tx.data);
-                    });
+                    if (typeof Visualforce.remoting.RemotingProvider === 'undefined') {
+                        // API Version 25+
+                        Visualforce.remoting.Manager.on('beforecall',function(pdr,tx,m){
+                           that.log.debug('VF Remoting beforecall', tx.data);
+                        });
+                    } else {
+                        // API Version 24-
+                        Visualforce.remoting.RemotingProvider.on('beforecall',function(pdr,tx,m){
+                           that.log.debug('VF Remoting beforecall', tx.data);
+                        });
+                    }
                 }
             })(this);
         },
