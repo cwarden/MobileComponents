@@ -29,10 +29,10 @@
  */
 public class AppController extends BaseConfigController {
 
-    private final static String JQUERY_JS = 'http://code.jquery.com/jquery-1.7.1.min.js';
-    private final static String JQUERY_JS_DEBUG = 'http://code.jquery.com/jquery-1.7.1.js';
-    private final static String JQUERY_TEMPLATE_JS = 'http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js';
-    private final static String JQUERY_TEMPLATE_JS_DEBUG = 'http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js';
+    private final static String JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js';
+    private final static String JQUERY_JS_DEBUG = '//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js';
+    private final static String JQUERY_TEMPLATE_JS = '//ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js';
+    private final static String JQUERY_TEMPLATE_JS_DEBUG = '//ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js';
     private final static String JQUERY_MOBILE_JS = 'jqm11js';
     private final static String MOBILE_SPLIT_VIEW_JS = 'jqmSVjs';
 
