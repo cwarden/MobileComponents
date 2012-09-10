@@ -63,7 +63,7 @@ For Example: To provide a custom list item template:
                 return '<h3 class="my-heading">${' + this.config.labelField + '}</h3>');
             }
         }
-        <c:List ... compHandler="MyListComponent"/>
+        <c:List ... jsCtlrName="MyListComponent"/>
 
 
 ## Roadmap ##
