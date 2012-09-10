@@ -147,8 +147,12 @@
                     if ($.isArray(result.records) && result.records.length == 1) {
                         if (this.layouts.length > 1)  {
                             layout = this.layouts.filter(function(val) {
-                                for (var idx in val.recordTypeIds) 
-                                    return val.recordTypeIds[idx] == result.records[0].RecordTypeId;
+                                for (var idx in val.recordTypeIds) {
+                                    if (val.recordTypeIds[idx] == result.records[0].RecordTypeId) {
+                                        return true;
+                                    }
+                                }
+                                return false;
                             })[0];
                         } else if (this.layouts.length == 1) layout = this.layouts[0];
                         
