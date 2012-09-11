@@ -19,8 +19,7 @@ body {
 }
 
 .ui-panel-right .ui-header, .ui-panel-right .ui-footer {
-	background: #236FBD url('/img/touch/headerCloud.png') no-repeat;
-    background-position: 90% bottom;
+	background: #236FBD;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.3);
